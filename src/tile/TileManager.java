@@ -27,7 +27,9 @@ public class TileManager {
 
     public void getTileImage() {
 
-        setup(0, "grass_1", false);
+        System.out.println("Hello from git!");
+
+        setup(0, "grad1", false);
         setup(1, "grass_1", false);
         setup(2, "grass_1", false);
         setup(3, "grass_1", false);
@@ -35,7 +37,6 @@ public class TileManager {
         setup(5, "grass_1", false);
         setup(6, "grass_1", false);
         setup(7, "grass_1", false);
-        setup(8, "grass_1", false);
         setup(9, "grass_1", false);
 
         // Grass tiles
