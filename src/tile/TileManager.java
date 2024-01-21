@@ -10,65 +10,83 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class TileManager {
 
     GamePanel gp;
     public Tile[] tile;
     public int[][] mapTileNum;
+    // boolean drawPath = false;
+    ArrayList<String> fileNames = new ArrayList<>();
+    ArrayList<String> collisionStatus = new ArrayList<>();
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[50];
-        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
+
+        // READ TEXT DATA FILE
+        InputStream is = getClass().getClassLoader().getResourceAsStream("maps/map05tiledata.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+        // GETTING TILE NAMES AND COLLISION INFO FROM THE FILE
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                fileNames.add(line);
+                collisionStatus.add(br.readLine());
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        tile = new Tile[fileNames.size()];
         getTileImage();
-        loadMap("maps/map03.txt");
+
+        // GET THE maxWorldCol & Row
+        is = getClass().getClassLoader().getResourceAsStream("maps/map05.txt");
+        br = new BufferedReader(new InputStreamReader(is));
+
+        try {
+
+            String line2 = br.readLine();
+            String maxTile[] = line2.split(" ");
+
+            gp.maxWorldCol = maxTile.length;
+            gp.maxWorldRow = maxTile.length;
+            mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        loadMap("maps/map05.txt");
     }
 
     public void getTileImage() {
 
-        System.out.println("Hello from git!");
+        for (int i = 0; i < fileNames.size(); i++) {
 
-        setup(0, "grad1", false);
-        setup(1, "grass_1", false);
-        setup(2, "grass_1", false);
-        setup(3, "grass_1", false);
-        setup(4, "grass_1", false);
-        setup(5, "grass_1", false);
-        setup(6, "grass_1", false);
-        setup(7, "grass_1", false);
-        setup(9, "grass_1", false);
+            String fileName;
+            boolean collision;
 
-        // Grass tiles
-        setup(10, "grass_1", false); // Without grass sprouts
-        setup(11, "grass_2", false); // With grass sprouts
+            // Get a file name
+            fileName = fileNames.get(i);
 
-        // Water tiles
-        setup(12, "water_1", true); // Water
-        setup(13, "water_2", true); // Water with ripples
-        setup(14, "water_up_l", false);
-        setup(15, "water_up", false);
-        setup(16, "water_up_r", false);
-        setup(17, "water_left", false);
-        setup(18, "water_right", false);
-        setup(19, "water_down_l", false);
-        setup(20, "water_down", false);
-        setup(21, "water_down_r", false);
-        setup(22, "water_bottom_l", false); // Corner
-        setup(23, "water_bottom_r", false); // Corner
-        setup(24, "water_top_l", false); // Corner
-        setup(25, "water_top_r", false); // Corner
+            // Get collision status
+            if (collisionStatus.get(i).equals("true")) {
+                collision = true;
+            } else {
+                collision = false;
+            }
 
-        // Environment tiles
-        setup(26, "small_tree", true);  // Tree
+            setup(i, fileName, collision);
 
-        // House tiles
-        setup(27, "wood_wall", true);  // Wood wall
-        setup(28, "brick_floor", false); // Brick floor
+        }
 
-        // Path tiles
-        setup(29, "dirt_tile", false); // Dirt (replace with path)
-        // add path tiles
+        // setup(0, "000", false);
 
     }
 
@@ -79,7 +97,7 @@ public class TileManager {
         try {
 
             tile[index] = new Tile();
-            tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/" + imageName + ".png")); // Grass
+            tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/" + imageName)); // Grass
             tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
             tile[index].collision = collision;
 
