@@ -74,7 +74,16 @@ public class Player extends Entity {
             // In Java, the upper left corner is (0,0)
             // X values increase to the right
             // Y values increase as they go down
-            if (keyH.upPressed) {
+
+            if (keyH.upPressed && keyH.rightPressed) {
+                direction = "up-right";
+            } else if (keyH.upPressed && keyH.leftPressed) {
+                direction = "up-left";
+            } else if (keyH.downPressed && keyH.rightPressed) {
+                direction = "down-right";
+            } else if (keyH.downPressed && keyH.leftPressed) {
+                direction = "down-left";
+            } else if (keyH.upPressed) {
                 direction = "up";
             } else if (keyH.downPressed) {
                 direction = "down";
@@ -93,8 +102,25 @@ public class Player extends Entity {
             pickUpObject(objIndex);
 
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
+            double horizontal_speed = speed / 1.414;
             if (!collisionOn) {
                 switch (direction) {
+                    case "up-right":
+                        worldY -= horizontal_speed;
+                        worldX += horizontal_speed;
+                        break;
+                    case "up-left":
+                        worldY -= horizontal_speed;
+                        worldX -= horizontal_speed;
+                        break;
+                    case "down-right":
+                        worldX += horizontal_speed;
+                        worldY += horizontal_speed;
+                        break;
+                    case "down-left":
+                        worldX -= horizontal_speed;
+                        worldY += horizontal_speed;
+                        break;
                     case "up":
                         worldY -= speed;
                         break;
@@ -137,6 +163,8 @@ public class Player extends Entity {
 
         switch(direction) {
             case "up":
+            case "up-right":
+            case "up-left":
                 if (spriteNum == 1) {
                     image = up1;
                 }
@@ -145,6 +173,8 @@ public class Player extends Entity {
                 }
                 break;
             case "down":
+            case "down-right":
+            case "down-left":
                 if (spriteNum == 1) {
                     image = down1;
                 }
