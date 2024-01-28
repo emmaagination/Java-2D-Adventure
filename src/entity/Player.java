@@ -1,5 +1,6 @@
 package entity;
 
+import main.Constants;
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
@@ -36,7 +37,7 @@ public class Player extends Entity {
         worldX = gp.tileSize * 25;
         worldY = gp.tileSize * 25;
         speed = 4;
-        direction = "down";
+        direction = Constants.SOUTH;
     }
 
     public void getPlayerImage() {
@@ -58,10 +59,8 @@ public class Player extends Entity {
         BufferedImage image = null;
 
         try {
-
             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/" + imageName + ".png"));
             image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,23 +73,22 @@ public class Player extends Entity {
             // In Java, the upper left corner is (0,0)
             // X values increase to the right
             // Y values increase as they go down
-
             if (keyH.upPressed && keyH.rightPressed) {
-                direction = "up-right";
+                direction = Constants.NORTHEAST;
             } else if (keyH.upPressed && keyH.leftPressed) {
-                direction = "up-left";
+                direction = Constants.NORTHWEST;
             } else if (keyH.downPressed && keyH.rightPressed) {
-                direction = "down-right";
+                direction = Constants.SOUTHEAST;
             } else if (keyH.downPressed && keyH.leftPressed) {
-                direction = "down-left";
+                direction = Constants.SOUTHWEST;
             } else if (keyH.upPressed) {
-                direction = "up";
+                direction = Constants.NORTH;
             } else if (keyH.downPressed) {
-                direction = "down";
+                direction = Constants.SOUTH;
             } else if (keyH.leftPressed) {
-                direction = "left";
+                direction = Constants.WEST;
             } else if (keyH.rightPressed) {
-                direction = "right";
+                direction = Constants.EAST;
             }
 
             // CHECK TILE COLLISION
@@ -105,32 +103,32 @@ public class Player extends Entity {
             double horizontal_speed = speed / 1.414;
             if (!collisionOn) {
                 switch (direction) {
-                    case "up-right":
-                        worldY -= horizontal_speed;
-                        worldX += horizontal_speed;
+                    case Constants.NORTHEAST:
+                        worldX = (int) Math.round(worldX + horizontal_speed);
+                        worldY = (int) Math.round(worldY - horizontal_speed);
                         break;
-                    case "up-left":
-                        worldY -= horizontal_speed;
-                        worldX -= horizontal_speed;
+                    case Constants.NORTHWEST:
+                        worldX = (int) Math.round(worldX - horizontal_speed);
+                        worldY = (int) Math.round(worldY - horizontal_speed);
                         break;
-                    case "down-right":
-                        worldX += horizontal_speed;
-                        worldY += horizontal_speed;
+                    case Constants.SOUTHEAST:
+                        worldX = (int) Math.round(worldX + horizontal_speed);
+                        worldY = (int) Math.round(worldY + horizontal_speed);
                         break;
-                    case "down-left":
-                        worldX -= horizontal_speed;
-                        worldY += horizontal_speed;
+                    case Constants.SOUTHWEST:
+                        worldX = (int) Math.round(worldX - horizontal_speed);
+                        worldY = (int) Math.round(worldY + horizontal_speed);
                         break;
-                    case "up":
+                    case Constants.NORTH:
                         worldY -= speed;
                         break;
-                    case "down":
+                    case Constants.SOUTH:
                         worldY += speed;
                         break;
-                    case "left":
+                    case Constants.WEST:
                         worldX -= speed;
                         break;
-                    case "right":
+                    case Constants.EAST:
                         worldX += speed;
                         break;
                 }
@@ -152,7 +150,7 @@ public class Player extends Entity {
 
         if (i != 999) {
 
-
+            // use later
 
         }
 
@@ -162,9 +160,7 @@ public class Player extends Entity {
         BufferedImage image = null;
 
         switch(direction) {
-            case "up":
-            case "up-right":
-            case "up-left":
+            case Constants.NORTH:
                 if (spriteNum == 1) {
                     image = up1;
                 }
@@ -172,9 +168,7 @@ public class Player extends Entity {
                     image = up2;
                 }
                 break;
-            case "down":
-            case "down-right":
-            case "down-left":
+            case Constants.SOUTH:
                 if (spriteNum == 1) {
                     image = down1;
                 }
@@ -182,7 +176,9 @@ public class Player extends Entity {
                     image = down2;
                 }
                 break;
-            case "left":
+            case Constants.WEST:
+            case Constants.SOUTHWEST:
+            case Constants.NORTHWEST:
                 if (spriteNum == 1) {
                     image = left1;
                 }
@@ -190,7 +186,9 @@ public class Player extends Entity {
                     image = left2;
                 }
                 break;
-            case "right":
+            case Constants.EAST:
+            case Constants.SOUTHEAST:
+            case Constants.NORTHEAST:
                 if (spriteNum == 1) {
                     image = right1;
                 }
@@ -202,4 +200,5 @@ public class Player extends Entity {
 
         g2.drawImage(image, screenX, screenY, null);
     }
+
 }
