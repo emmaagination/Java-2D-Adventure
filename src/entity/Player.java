@@ -100,24 +100,24 @@ public class Player extends Entity {
             pickUpObject(objIndex);
 
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
-            double horizontal_speed = speed / 1.414;
+            double diagonalSpeed = speed / 1.414;
             if (!collisionOn) {
                 switch (direction) {
                     case Constants.NORTHEAST:
-                        worldX = (int) Math.round(worldX + horizontal_speed);
-                        worldY = (int) Math.round(worldY - horizontal_speed);
+                        worldX = (int) Math.round(worldX + diagonalSpeed);
+                        worldY = (int) Math.round(worldY - diagonalSpeed);
                         break;
                     case Constants.NORTHWEST:
-                        worldX = (int) Math.round(worldX - horizontal_speed);
-                        worldY = (int) Math.round(worldY - horizontal_speed);
+                        worldX = (int) Math.round(worldX - diagonalSpeed);
+                        worldY = (int) Math.round(worldY - diagonalSpeed);
                         break;
                     case Constants.SOUTHEAST:
-                        worldX = (int) Math.round(worldX + horizontal_speed);
-                        worldY = (int) Math.round(worldY + horizontal_speed);
+                        worldX = (int) Math.round(worldX + diagonalSpeed);
+                        worldY = (int) Math.round(worldY + diagonalSpeed);
                         break;
                     case Constants.SOUTHWEST:
-                        worldX = (int) Math.round(worldX - horizontal_speed);
-                        worldY = (int) Math.round(worldY + horizontal_speed);
+                        worldX = (int) Math.round(worldX - diagonalSpeed);
+                        worldY = (int) Math.round(worldY + diagonalSpeed);
                         break;
                     case Constants.NORTH:
                         worldY -= speed;

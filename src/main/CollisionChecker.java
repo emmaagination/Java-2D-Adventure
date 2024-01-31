@@ -25,108 +25,165 @@ public class CollisionChecker {
         // Row 0, 1, 2
         // Column 0, 1, 2 etc
         int tileNum1, tileNum2, tileNum3;
+        boolean northCollision, southCollision, eastCollision, westCollision, diagonalCollision;
 
         switch(entity.direction) {
             case Constants.NORTH:
                 entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
+
+                // Left north tile
                 tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
+                // Right north tile
                 tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case Constants.SOUTH:
                 entityBottomRow = (entityBottomWorldY + entity.speed)/gp.tileSize;
+
+                // Left south tile
                 tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
+                // Right south tile
                 tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case Constants.WEST:
                 entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
+
+                // Top west tile
                 tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
+                // Bottom west tile
                 tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
+
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case Constants.EAST:
                 entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
+
+                // Top east tile
                 tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+                // Bottom east tile
                 tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case Constants.NORTHEAST:
-                // Future positions
                 int futureTopY = (entityTopWorldY - entity.speed) / gp.tileSize;
                 int futureRightX = (entityRightWorldX + entity.speed) / gp.tileSize;
 
-                // Directly North tile
+                // North tile
                 tileNum1 = gp.tileM.mapTileNum[entityLeftCol][futureTopY];
-                // Directly East tile
+                // East tile
                 tileNum2 = gp.tileM.mapTileNum[futureRightX][entityTopRow];
-                // Diagonally Northeast tile
+                // Diagonally northeast tile
                 tileNum3 = gp.tileM.mapTileNum[futureRightX][futureTopY];
 
-                if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision || gp.tileM.tile[tileNum3].collision) {
+                northCollision = gp.tileM.tile[tileNum1].collision;
+                eastCollision = gp.tileM.tile[tileNum2].collision;
+                diagonalCollision = gp.tileM.tile[tileNum3].collision;
+
+                if (northCollision && eastCollision) {
+                    entity.collisionOn = true;
+                } else if (northCollision) {
+                    entity.direction = Constants.EAST;
+                } else if (eastCollision) {
+                    entity.direction = Constants.NORTH;
+                } else if (diagonalCollision) {
                     entity.collisionOn = true;
                 }
+
                 break;
             case Constants.NORTHWEST:
-                // Future positions
                 int futureTopY_NW = (entityTopWorldY - entity.speed) / gp.tileSize;
                 int futureLeftX = (entityLeftWorldX - entity.speed) / gp.tileSize;
 
-                // Directly North tile
+                // North tile
                 tileNum1 = gp.tileM.mapTileNum[entityRightCol][futureTopY_NW];
-                // Directly West tile
+                // West tile
                 tileNum2 = gp.tileM.mapTileNum[futureLeftX][entityTopRow];
-                // Diagonally Northwest tile
+                // Diagonally northwest tile
                 tileNum3 = gp.tileM.mapTileNum[futureLeftX][futureTopY_NW];
 
-                if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision || gp.tileM.tile[tileNum3].collision) {
+                northCollision = gp.tileM.tile[tileNum1].collision;
+                westCollision = gp.tileM.tile[tileNum2].collision;
+                diagonalCollision = gp.tileM.tile[tileNum3].collision;
+
+                if (northCollision && westCollision) {
+                    entity.collisionOn = true;
+                } else if (northCollision) {
+                    entity.direction = Constants.WEST;
+                } else if (westCollision) {
+                    entity.direction = Constants.NORTH;
+                } else if (diagonalCollision) {
                     entity.collisionOn = true;
                 }
+
                 break;
             case Constants.SOUTHEAST:
-                // Future positions
                 int futureBottomY_SE = (entityBottomWorldY + entity.speed) / gp.tileSize;
                 int futureRightX_SE = (entityRightWorldX + entity.speed) / gp.tileSize;
 
-                // Directly South tile
+                // South tile
                 tileNum1 = gp.tileM.mapTileNum[entityLeftCol][futureBottomY_SE];
-                // Directly East tile
+                // East tile
                 tileNum2 = gp.tileM.mapTileNum[futureRightX_SE][entityBottomRow];
-                // Diagonally Southeast tile
+                // Diagonally southeast tile
                 tileNum3 = gp.tileM.mapTileNum[futureRightX_SE][futureBottomY_SE];
 
-                if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision || gp.tileM.tile[tileNum3].collision) {
+                southCollision = gp.tileM.tile[tileNum1].collision;
+                eastCollision = gp.tileM.tile[tileNum2].collision;
+                diagonalCollision = gp.tileM.tile[tileNum3].collision;
+
+                if (southCollision && eastCollision) {
+                    entity.collisionOn = true;
+                } else if (southCollision) {
+                    entity.direction = Constants.EAST;
+                } else if (eastCollision) {
+                    entity.direction = Constants.SOUTH;
+                } else if (diagonalCollision) {
                     entity.collisionOn = true;
                 }
+
                 break;
 
             case Constants.SOUTHWEST:
-                // Future positions
                 int futureBottomY_SW = (entityBottomWorldY + entity.speed) / gp.tileSize;
                 int futureLeftX_SW = (entityLeftWorldX - entity.speed) / gp.tileSize;
 
-                // Directly South tile
+                // South tile
                 tileNum1 = gp.tileM.mapTileNum[entityRightCol][futureBottomY_SW];
-                // Directly West tile
+                // West tile
                 tileNum2 = gp.tileM.mapTileNum[futureLeftX_SW][entityBottomRow];
-                // Diagonally Southwest tile
+                // Diagonally southwest tile
                 tileNum3 = gp.tileM.mapTileNum[futureLeftX_SW][futureBottomY_SW];
 
-                if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision || gp.tileM.tile[tileNum3].collision) {
+                southCollision = gp.tileM.tile[tileNum1].collision;
+                westCollision = gp.tileM.tile[tileNum2].collision;
+                diagonalCollision = gp.tileM.tile[tileNum3].collision;
+
+                if (southCollision && westCollision) {
+                    entity.collisionOn = true;
+                } else if (southCollision) {
+                    entity.direction = Constants.WEST;
+                } else if (westCollision) {
+                    entity.direction = Constants.SOUTH;
+                } else if (diagonalCollision) {
                     entity.collisionOn = true;
                 }
-                break;
 
+                break;
         }
     }
+
     public int checkObject(Entity entity, boolean player) {
 
         int index = 999;
@@ -207,8 +264,5 @@ public class CollisionChecker {
         }
         return index;
     }
-
-
-
 
 }
