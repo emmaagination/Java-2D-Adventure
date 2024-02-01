@@ -18,6 +18,8 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
+    boolean isMoving = false;
+
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
@@ -44,12 +46,16 @@ public class Player extends Entity {
 
         up1 = setup("player_up_1");
         up2 = setup("player_up_2");
+        upIdle = setup("player_up_3");
         down1 = setup("player_down_1");
         down2 = setup("player_down_2");
+        downIdle = setup("player_down_3");
         left1 = setup("player_left_1");
         left2 = setup("player_left_2");
+        leftIdle = setup("player_left_3");
         right1 = setup("player_right_1");
         right2 = setup("player_right_2");
+        rightIdle = setup("player_right_3");
 
     }
 
@@ -69,7 +75,9 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+        isMoving = (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed);
+
+        if (isMoving) {
             // In Java, the upper left corner is (0,0)
             // X values increase to the right
             // Y values increase as they go down
@@ -159,43 +167,64 @@ public class Player extends Entity {
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
-        switch(direction) {
-            case Constants.NORTH:
-                if (spriteNum == 1) {
-                    image = up1;
-                }
-                if (spriteNum == 2) {
-                    image = up2;
-                }
-                break;
-            case Constants.SOUTH:
-                if (spriteNum == 1) {
-                    image = down1;
-                }
-                if (spriteNum == 2) {
-                    image = down2;
-                }
-                break;
-            case Constants.WEST:
-            case Constants.SOUTHWEST:
-            case Constants.NORTHWEST:
-                if (spriteNum == 1) {
-                    image = left1;
-                }
-                if (spriteNum == 2) {
-                    image = left2;
-                }
-                break;
-            case Constants.EAST:
-            case Constants.SOUTHEAST:
-            case Constants.NORTHEAST:
-                if (spriteNum == 1) {
-                    image = right1;
-                }
-                if (spriteNum == 2) {
-                    image = right2;
-                }
-                break;
+        if (isMoving) {
+            switch(direction) {
+                case Constants.NORTH:
+                    if (spriteNum == 1) {
+                        image = up1;
+                    }
+                    if (spriteNum == 2) {
+                        image = up2;
+                    }
+                    break;
+                case Constants.SOUTH:
+                    if (spriteNum == 1) {
+                        image = down1;
+                    }
+                    if (spriteNum == 2) {
+                        image = down2;
+                    }
+                    break;
+                case Constants.WEST:
+                case Constants.SOUTHWEST:
+                case Constants.NORTHWEST:
+                    if (spriteNum == 1) {
+                        image = left1;
+                    }
+                    if (spriteNum == 2) {
+                        image = left2;
+                    }
+                    break;
+                case Constants.EAST:
+                case Constants.SOUTHEAST:
+                case Constants.NORTHEAST:
+                    if (spriteNum == 1) {
+                        image = right1;
+                    }
+                    if (spriteNum == 2) {
+                        image = right2;
+                    }
+                    break;
+            }
+        } else {
+            switch (direction) {
+                case Constants.NORTH:
+                    image = upIdle;
+                    break;
+                case Constants.SOUTH:
+                    image = downIdle;
+                    break;
+                case Constants.WEST:
+                case Constants.SOUTHWEST:
+                case Constants.NORTHWEST:
+                    image = leftIdle;
+                    break;
+                case Constants.EAST:
+                case Constants.SOUTHEAST:
+                case Constants.NORTHEAST:
+                    image = rightIdle;
+                    break;
+            }
         }
 
         g2.drawImage(image, screenX, screenY, null);

@@ -27,6 +27,8 @@ public class CollisionChecker {
         int tileNum1, tileNum2, tileNum3;
         boolean northCollision, southCollision, eastCollision, westCollision, diagonalCollision;
 
+        // TODO: The added diagonal collision may allow you to enter a tile slightly, but it is easy to exit the tile. Adjust.
+
         switch(entity.direction) {
             case Constants.NORTH:
                 entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
@@ -154,7 +156,6 @@ public class CollisionChecker {
                 }
 
                 break;
-
             case Constants.SOUTHWEST:
                 int futureBottomY_SW = (entityBottomWorldY + entity.speed) / gp.tileSize;
                 int futureLeftX_SW = (entityLeftWorldX - entity.speed) / gp.tileSize;
